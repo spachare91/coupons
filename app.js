@@ -53,6 +53,21 @@ app.post('/validcoupon',async(req,res)=>{
     }
 })
 
+// fetch coupons for employeee...
+app.get('/coupon/:id',async(req,res)=>{
+        const emp_id = req.params.id;
+        try {
+            const ans= await Coupons.findAll({
+                where: {employee_id:emp_id}
+            })
+            res.json({ans})
+        } catch (err) {
+            console.log(err);
+            
+        }
+
+})
+
 
 
 
