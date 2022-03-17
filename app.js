@@ -15,7 +15,7 @@ app.get('/',async(req,res)=>{
 
 app.post('/coupon',async(req,res)=>{
     try {
-        console.log(req.body);
+        // console.log(req.body);
         const ans= await Coupons.create(req.body)
         
         res.json({ans})
@@ -33,14 +33,6 @@ app.post('/validcoupon',async(req,res)=>{
     try {
         const {title, branch_id,customer_no,bday,emp_id} =req.body
         const date=new Date();
-        console.log(title);
-        console.log(branch_id);
-        console.log(customer_no);
-        console.log(bday);
-        console.log(emp_id);
-
-
-
 
             //search by title...plat gold etc..working
 
@@ -60,7 +52,6 @@ app.post('/validcoupon',async(req,res)=>{
                 }
                 
             }
-
 
              // if employee id is given and customer no is null...working
              if(emp_id!=null && title==null && customer_no==null && bday==null && branch_id!=null){
@@ -132,10 +123,6 @@ app.post('/validcoupon',async(req,res)=>{
                 }
             }
 
-
-
-
-            //
             res.send()
         
 
@@ -151,7 +138,6 @@ app.post('/validcoupon',async(req,res)=>{
 app.listen(5000,async()=>{
     console.log(`Connected on port http://localhost:5000`)
     try {
-        //Coupons.sync({force:true})
         await sequelize.authenticate();
         console.log("Database connected....");
 
