@@ -1,6 +1,8 @@
 const express = require('express')
 const { sequelize ,Coupons,} = require('./models/index')
 const {Op} =require('sequelize')
+const res = require('express/lib/response')
+const { json } = require('express/lib/response')
 
 const app= express()
 
@@ -29,54 +31,131 @@ app.post('/coupon',async(req,res)=>{
 
 app.post('/validcoupon',async(req,res)=>{
     try {
-        const {title, branch_id,customer_no,bday} =req.body
-        
-            if(bday==true){
-                const ans= await Coupons.findAll({
-                    where: {title:[title,"birthday"], branch_id:branch_id , [Op.or]: [{customer_no: null}, {customer_no: customer_no}]}
-                })
-                res.json({ans})
+        const {title, branch_id,customer_no,bday,emp_id} =req.body
+        const date=new Date();
+        // console.log(title);
+        // console.log(branch_id);
+        // console.log(customer_no);
+        // console.log(bday);
+        // console.log(emp_id);
+
+
+
+
+            //search by title...plat gold etc..working
+
+            if(title!=null && emp_id==null && customer_no==null && bday==null && branch_id==null){
+                try {
+                    const ans= await Coupons.findAll({
+                        where:{title:title,start:{[Op.lte]:date},end:{ [Op.gte]:date}}
+                    })
+                    res.json({ans})
+                
+ 
+                } catch (err) {
+                    console.log(err)
+                    req.json({ans})
+                 
+
+                }
+                
             }
-            else{
-                const ans= await Coupons.findAll({
-                    where: { title:title, branch_id:branch_id , [Op.or]: [{customer_no: null}, {customer_no: customer_no}]}
-                })
-                res.json({ans})
+
+
+             // if employee id is given and customer no is null...not working
+             if(emp_id!= null && title==null && customer_no==null && bday==null && branch_id!=null){
+                try {
+                    const ans=await Coupons.findAll({
+                        where: {employee_id:emp_id,branch_id:branch_id, start:{[Op.lte]:date},end:{ [Op.gte]:date}}
+                    })
+                    res.json({ans})
+
+                } catch (err) {
+                    console.log(err);
+
+                }
+            }           
+            
+            // if employee id and customer no is given...not working...
+            if(title==null && emp_id!=null && customer_no!=null && bday==null && branch_id!=null){
+                try {
+                    const ans=await Coupons.findAll({
+                        where: {employee_id:emp_id,branch_id:branch_id,customer_no:customer_no, start:{[Op.lte]:date},end:{ [Op.gte]:date}}
+                    })
+                    console.log("form here")
+                    res.json({ans})
+
+                } catch (err) {
+                    console.log(err);
+
+                }
+            }
+
+            // show coupons branch wise.....working
+            if(title==null && emp_id==null && customer_no==null && bday==null && branch_id!=null){
+                try {
+                    const ans=await Coupons.findAll({
+                        where: {branch_id:branch_id, start:{[Op.lte]:date},end:{ [Op.gte]:date}}
+                    })
+                    res.json({ans})
+
+                } catch (err) {
+                    console.log(err);
+
+                }
+            }
+
+            // if bday value is true..WORKING
+            if(title==null && emp_id==null && customer_no==null && bday==true && branch_id==null){
+                try {
+                    const ans= await Coupons.findAll({
+                        where: {title:"birthday"}
+                    })
+                    res.json({ans})
+                } catch (err) {
+                    console.log(err)
+                    res.json({err})   
+                }
             }
   
+            // show coupons for current date...WORKING
+            if(title==null && emp_id==null && customer_no==null && bday==null && branch_id==null){
+                try {
+                    const ans=await Coupons.findAll({
+                        where: {start:{[Op.lte]:date},end:{ [Op.gte]:date}}
+                    })
+                    res.json({ans})
+                    res.send()
+                } catch (err) {
+                    console.log(err);
+                    res.send();
+                }
+            }
+
+
+
+
+            //
             res.send()
         
 
     } catch (err) {
+        console.log(err)
         res.json({err})
         
     }
 })
-
-// fetch coupons for employeee...
-app.get('/coupon/:id',async(req,res)=>{
-        const emp_id = req.params.id;
-        try {
-            const ans= await Coupons.findAll({
-                where: {employee_id:emp_id}
-            })
-            res.json({ans})
-        } catch (err) {
-            console.log(err);
-            
-        }
-
-})
-
 
 
 
 app.listen(5000,async()=>{
     console.log(`Connected on port http://localhost:5000`)
     try {
-     //   Coupons.sync({force:true})
+        //Coupons.sync({force:true})
         await sequelize.authenticate();
         console.log("Database connected....");
+
+
     } catch (err) {
         console.log(err);
     }

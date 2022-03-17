@@ -6,7 +6,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         type: DataTypes.UUID,
-        default:DataTypes.UUIDV4
+        defaultValue:DataTypes.UUIDV4
       },
       coupon_code: {
         type: DataTypes.STRING,
@@ -18,11 +18,11 @@ module.exports = {
         allowNull:false
       },
       start: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull:false
       },
       end: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull:false
       },
       disc_percent: {
@@ -38,11 +38,11 @@ module.exports = {
         allowNull:true
       },
       employee_id: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         allowNull:true
       },
       branch_id: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         allowNull:false
       },
       min_cart: {

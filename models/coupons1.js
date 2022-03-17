@@ -14,6 +14,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Coupons.init({
+    coupon_id: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.UUID,
+      defaultValue:DataTypes.UUIDV4
+    },
     coupon_code: {
       type: DataTypes.STRING,
       allowNull:false
@@ -24,11 +30,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:false
     },
     start: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATE,
       allowNull:false
     },
     end: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATE,
       allowNull:false
     },
     disc_percent: {
@@ -44,11 +50,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:true
     },
     employee_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       allowNull:true
     },
     branch_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       allowNull:false
     },
     min_cart: {
