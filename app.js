@@ -33,11 +33,11 @@ app.post('/validcoupon',async(req,res)=>{
     try {
         const {title, branch_id,customer_no,bday,emp_id} =req.body
         const date=new Date();
-        // console.log(title);
-        // console.log(branch_id);
-        // console.log(customer_no);
-        // console.log(bday);
-        // console.log(emp_id);
+        console.log(title);
+        console.log(branch_id);
+        console.log(customer_no);
+        console.log(bday);
+        console.log(emp_id);
 
 
 
@@ -62,8 +62,8 @@ app.post('/validcoupon',async(req,res)=>{
             }
 
 
-             // if employee id is given and customer no is null...not working
-             if(emp_id!= null && title==null && customer_no==null && bday==null && branch_id!=null){
+             // if employee id is given and customer no is null...working
+             if(emp_id!=null && title==null && customer_no==null && bday==null && branch_id!=null){
                 try {
                     const ans=await Coupons.findAll({
                         where: {employee_id:emp_id,branch_id:branch_id, start:{[Op.lte]:date},end:{ [Op.gte]:date}}
@@ -76,7 +76,7 @@ app.post('/validcoupon',async(req,res)=>{
                 }
             }           
             
-            // if employee id and customer no is given...not working...
+            // if employee id and customer no is given...working...
             if(title==null && emp_id!=null && customer_no!=null && bday==null && branch_id!=null){
                 try {
                     const ans=await Coupons.findAll({
